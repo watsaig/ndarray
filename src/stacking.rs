@@ -33,8 +33,9 @@ use crate::imp_prelude::*;
 ///                  [3., 3.]]))
 /// );
 /// ```
-pub fn concatenate<A, D>(axis: Axis, arrays: &[ArrayView<A, D>]) -> Result<Array<A, D>, ShapeError>
+pub fn concatenate<S, D, A>(axis: Axis, arrays: &[ArrayBase<S, D, A>]) -> Result<Array<A, D>, ShapeError>
 where
+    S: Data<Elem = A>,
     A: Clone,
     D: RemoveAxis,
 {
@@ -66,7 +67,7 @@ where
     };
 
     for array in arrays {
-        res.append(axis, array.clone())?;
+        res.append(axis, array.view())?;
     }
     debug_assert_eq!(res.len_of(axis), stacked_dim);
     Ok(res)
@@ -96,8 +97,9 @@ where
 /// );
 /// # }
 /// ```
-pub fn stack<A, D>(axis: Axis, arrays: &[ArrayView<A, D>]) -> Result<Array<A, D::Larger>, ShapeError>
+pub fn stack<S, D, A>(axis: Axis, arrays: &[ArrayBase<S, D, A>]) -> Result<Array<A, D::Larger>, ShapeError>
 where
+    S: Data<Elem = A>,
     A: Clone,
     D: Dimension,
     D::Larger: RemoveAxis,
@@ -129,7 +131,7 @@ where
     };
 
     for array in arrays {
-        res.append(axis, array.clone().insert_axis(axis))?;
+        res.append(axis, array.view().insert_axis(axis))?;
     }
 
     debug_assert_eq!(res.len_of(axis), arrays.len());
