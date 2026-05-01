@@ -33,10 +33,10 @@ use crate::imp_prelude::*;
 ///                  [3., 3.]]))
 /// );
 /// ```
-pub fn concatenate<S, D, A>(axis: Axis, arrays: &[ArrayBase<S, D, A>]) -> Result<Array<A, D>, ShapeError>
+pub fn concatenate<S, D>(axis: Axis, arrays: &[ArrayBase<S, D>]) -> Result<Array<S::Elem, D>, ShapeError>
 where
-    S: Data<Elem = A>,
-    A: Clone,
+    S: Data,
+    S::Elem: Clone,
     D: RemoveAxis,
 {
     if arrays.is_empty() {
@@ -97,12 +97,11 @@ where
 /// );
 /// # }
 /// ```
-pub fn stack<S, D, A>(axis: Axis, arrays: &[ArrayBase<S, D, A>]) -> Result<Array<A, D::Larger>, ShapeError>
+pub fn stack<S, D>(axis: Axis, arrays: &[ArrayBase<S, D>]) -> Result<Array<S::Elem, D::Larger>, ShapeError>
 where
-    S: Data<Elem = A>,
-    A: Clone,
+    S: Data,
+    S::Elem: Clone,
     D: Dimension,
-    D::Larger: RemoveAxis,
 {
     if arrays.is_empty() {
         return Err(from_kind(ErrorKind::Unsupported));
