@@ -89,19 +89,14 @@ macro_rules! impl_approx_traits {
                     A::default_max_relative()
                 }
 
-                fn relative_eq(
-                    &self,
-                    other: &ArrayRef<B, D>,
-                    epsilon: A::Epsilon,
-                    max_relative: A::Epsilon,
-                ) -> bool {
+                fn relative_eq(&self, other: &ArrayRef<B, D>, epsilon: A::Epsilon, max_relative: A::Epsilon) -> bool {
                     if self.shape() != other.shape() {
                         return false;
                     }
 
-                    Zip::from(self).and(other).all(move |a, b| {
-                        A::relative_eq(a, b, epsilon.clone(), max_relative.clone())
-                    })
+                    Zip::from(self)
+                        .and(other)
+                        .all(move |a, b| A::relative_eq(a, b, epsilon.clone(), max_relative.clone()))
                 }
             }
 
@@ -118,12 +113,7 @@ macro_rules! impl_approx_traits {
                     A::default_max_relative()
                 }
 
-                fn relative_eq(
-                    &self,
-                    other: &ArrayBase<S2, D>,
-                    epsilon: A::Epsilon,
-                    max_relative: A::Epsilon,
-                ) -> bool {
+                fn relative_eq(&self, other: &ArrayBase<S2, D>, epsilon: A::Epsilon, max_relative: A::Epsilon) -> bool {
                     (**self).relative_eq(other, epsilon, max_relative)
                 }
             }
@@ -139,12 +129,7 @@ macro_rules! impl_approx_traits {
                     A::default_max_ulps()
                 }
 
-                fn ulps_eq(
-                    &self,
-                    other: &ArrayRef<B, D>,
-                    epsilon: A::Epsilon,
-                    max_ulps: u32,
-                ) -> bool {
+                fn ulps_eq(&self, other: &ArrayRef<B, D>, epsilon: A::Epsilon, max_ulps: u32) -> bool {
                     if self.shape() != other.shape() {
                         return false;
                     }
@@ -168,12 +153,7 @@ macro_rules! impl_approx_traits {
                     A::default_max_ulps()
                 }
 
-                fn ulps_eq(
-                    &self,
-                    other: &ArrayBase<S2, D>,
-                    epsilon: A::Epsilon,
-                    max_ulps: u32,
-                ) -> bool {
+                fn ulps_eq(&self, other: &ArrayBase<S2, D>, epsilon: A::Epsilon, max_ulps: u32) -> bool {
                     (**self).ulps_eq(other, epsilon, max_ulps)
                 }
             }
@@ -183,8 +163,8 @@ macro_rules! impl_approx_traits {
                 use crate::prelude::*;
                 use alloc::vec;
                 use $approx::{
-                    assert_abs_diff_eq, assert_abs_diff_ne, assert_relative_eq, assert_relative_ne,
-                    assert_ulps_eq, assert_ulps_ne,
+                    assert_abs_diff_eq, assert_abs_diff_ne, assert_relative_eq, assert_relative_ne, assert_ulps_eq,
+                    assert_ulps_ne,
                 };
 
                 #[test]

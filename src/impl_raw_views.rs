@@ -97,10 +97,7 @@ where D: Dimension
     #[inline]
     pub unsafe fn deref_into_view<'a>(self) -> ArrayView<'a, A, D>
     {
-        debug_assert!(
-            is_aligned(self.parts.ptr.as_ptr()),
-            "The pointer must be aligned."
-        );
+        debug_assert!(is_aligned(self.parts.ptr.as_ptr()), "The pointer must be aligned.");
         ArrayView::new(self.parts.ptr, self.parts.dim, self.parts.strides)
     }
 
@@ -147,11 +144,7 @@ where D: Dimension
     #[track_caller]
     pub fn cast<B>(self) -> RawArrayView<B, D>
     {
-        assert_eq!(
-            mem::size_of::<B>(),
-            mem::size_of::<A>(),
-            "size mismatch in raw view cast"
-        );
+        assert_eq!(mem::size_of::<B>(), mem::size_of::<A>(), "size mismatch in raw view cast");
         let ptr = self.parts.ptr.cast::<B>();
         unsafe { RawArrayView::new(ptr, self.parts.dim, self.parts.strides) }
     }
@@ -166,10 +159,7 @@ where D: Dimension
     {
         // Check that the size and alignment of `Complex<T>` are as expected.
         // These assertions should always pass, for arbitrary `T`.
-        assert_eq!(
-            mem::size_of::<Complex<T>>(),
-            mem::size_of::<T>().checked_mul(2).unwrap()
-        );
+        assert_eq!(mem::size_of::<Complex<T>>(), mem::size_of::<T>().checked_mul(2).unwrap());
         assert_eq!(mem::align_of::<Complex<T>>(), mem::align_of::<T>());
 
         let dim = self.parts.dim.clone();
@@ -294,8 +284,10 @@ where D: Dimension
             if let Strides::Custom(strides) = &shape.strides {
                 dimension::strides_non_negative(strides).unwrap();
                 dimension::max_abs_offset_check_overflow::<A, _>(&dim, strides).unwrap();
-                assert!(!dimension::dim_stride_overlap(&dim, strides),
-                        "The strides must not allow any element to be referenced by two different indices");
+                assert!(
+                    !dimension::dim_stride_overlap(&dim, strides),
+                    "The strides must not allow any element to be referenced by two different indices"
+                );
             } else {
                 dimension::size_of_shape_checked(&dim).unwrap();
             }
@@ -322,10 +314,7 @@ where D: Dimension
     #[inline]
     pub unsafe fn deref_into_view<'a>(self) -> ArrayView<'a, A, D>
     {
-        debug_assert!(
-            is_aligned(self.parts.ptr.as_ptr()),
-            "The pointer must be aligned."
-        );
+        debug_assert!(is_aligned(self.parts.ptr.as_ptr()), "The pointer must be aligned.");
         ArrayView::new(self.parts.ptr, self.parts.dim, self.parts.strides)
     }
 
@@ -340,10 +329,7 @@ where D: Dimension
     #[inline]
     pub unsafe fn deref_into_view_mut<'a>(self) -> ArrayViewMut<'a, A, D>
     {
-        debug_assert!(
-            is_aligned(self.parts.ptr.as_ptr()),
-            "The pointer must be aligned."
-        );
+        debug_assert!(is_aligned(self.parts.ptr.as_ptr()), "The pointer must be aligned.");
         ArrayViewMut::new(self.parts.ptr, self.parts.dim, self.parts.strides)
     }
 
@@ -377,11 +363,7 @@ where D: Dimension
     #[track_caller]
     pub fn cast<B>(self) -> RawArrayViewMut<B, D>
     {
-        assert_eq!(
-            mem::size_of::<B>(),
-            mem::size_of::<A>(),
-            "size mismatch in raw view cast"
-        );
+        assert_eq!(mem::size_of::<B>(), mem::size_of::<A>(), "size mismatch in raw view cast");
         let ptr = self.parts.ptr.cast::<B>();
         unsafe { RawArrayViewMut::new(ptr, self.parts.dim, self.parts.strides) }
     }

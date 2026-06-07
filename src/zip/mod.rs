@@ -443,11 +443,16 @@ where
     #[inline]
     pub(crate) fn debug_assert_c_order(self) -> Self
     {
-        debug_assert!(self.layout.is(Layout::CORDER) || self.layout_tendency >= 0 ||
-                      self.dimension.slice().iter().filter(|&&d| d > 1).count() <= 1,
-                      "Assertion failed: traversal is not c-order or 1D for \
+        debug_assert!(
+            self.layout.is(Layout::CORDER)
+                || self.layout_tendency >= 0
+                || self.dimension.slice().iter().filter(|&&d| d > 1).count() <= 1,
+            "Assertion failed: traversal is not c-order or 1D for \
                       layout {:?}, tendency {}, dimension {:?}",
-                      self.layout, self.layout_tendency, self.dimension);
+            self.layout,
+            self.layout_tendency,
+            self.dimension
+        );
         self
     }
 }

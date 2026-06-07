@@ -111,15 +111,8 @@ impl<A> ArrayRef<A, Ix1>
                         unsafe {
                             let (lhs_ptr, n, incx) =
                                 blas_1d_params(self._ptr().as_ptr(), self.len(), self.strides()[0]);
-                            let (rhs_ptr, _, incy) =
-                                blas_1d_params(rhs._ptr().as_ptr(), rhs.len(), rhs.strides()[0]);
-                            let ret = blas_sys::$func(
-                                n,
-                                lhs_ptr as *const $ty,
-                                incx,
-                                rhs_ptr as *const $ty,
-                                incy,
-                            );
+                            let (rhs_ptr, _, incy) = blas_1d_params(rhs._ptr().as_ptr(), rhs.len(), rhs.strides()[0]);
+                            let ret = blas_sys::$func(n, lhs_ptr as *const $ty, incx, rhs_ptr as *const $ty, incy);
                             return cast_as::<$ty, A>(&ret);
                         }
                     }
@@ -183,8 +176,7 @@ macro_rules! impl_dots {
         {
             type Output = <ArrayRef<A, $shape1> as Dot<ArrayRef<A, $shape2>>>::Output;
 
-            fn dot(&self, rhs: &ArrayBase<S2, $shape2>) -> Self::Output
-            {
+            fn dot(&self, rhs: &ArrayBase<S2, $shape2>) -> Self::Output {
                 Dot::dot(&**self, &**rhs)
             }
         }
@@ -196,8 +188,7 @@ macro_rules! impl_dots {
         {
             type Output = <ArrayRef<A, $shape1> as Dot<ArrayRef<A, $shape2>>>::Output;
 
-            fn dot(&self, rhs: &ArrayRef<A, $shape2>) -> Self::Output
-            {
+            fn dot(&self, rhs: &ArrayRef<A, $shape2>) -> Self::Output {
                 (**self).dot(rhs)
             }
         }
@@ -209,8 +200,7 @@ macro_rules! impl_dots {
         {
             type Output = <ArrayRef<A, $shape1> as Dot<ArrayRef<A, $shape2>>>::Output;
 
-            fn dot(&self, rhs: &ArrayBase<S, $shape2>) -> Self::Output
-            {
+            fn dot(&self, rhs: &ArrayBase<S, $shape2>) -> Self::Output {
                 self.dot(&**rhs)
             }
         }
@@ -340,18 +330,17 @@ fn dot_shape_error(m: usize, k: usize, k2: usize, n: usize) -> !
         Some(len) if len <= isize::MAX as usize => {}
         _ => panic!("ndarray: shape {} × {} overflows isize", m, n),
     }
-    panic!(
-        "ndarray: inputs {} × {} and {} × {} are not compatible for matrix multiplication",
-        m, k, k2, n
-    );
+    panic!("ndarray: inputs {} × {} and {} × {} are not compatible for matrix multiplication", m, k, k2, n);
 }
 
 #[cold]
 #[inline(never)]
 fn general_dot_shape_error(m: usize, k: usize, k2: usize, n: usize, c1: usize, c2: usize) -> !
 {
-    panic!("ndarray: inputs {} × {}, {} × {}, and output {} × {} are not compatible for matrix multiplication",
-           m, k, k2, n, c1, c2);
+    panic!(
+        "ndarray: inputs {} × {}, {} × {}, and output {} × {} are not compatible for matrix multiplication",
+        m, k, k2, n, c1, c2
+    );
 }
 
 /// Perform the matrix multiplication of the rectangular array `self` and
@@ -467,17 +456,17 @@ where A: LinalgScalar
                                 cblas_layout,
                                 a_trans,
                                 b_trans,
-                                m as blas_index,                 // m, rows of Op(a)
-                                n as blas_index,                 // n, cols of Op(b)
-                                k as blas_index,                 // k, cols of Op(a)
-                                gemm_scalar_cast!($ty, alpha),   // alpha
-                                a._ptr().as_ptr() as *const _,      // a
-                                lda,                             // lda
-                                b._ptr().as_ptr() as *const _,      // b
-                                ldb,                             // ldb
-                                gemm_scalar_cast!($ty, beta),    // beta
-                                c._ptr().as_ptr() as *mut _,        // c
-                                ldc,                             // ldc
+                                m as blas_index,               // m, rows of Op(a)
+                                n as blas_index,               // n, cols of Op(b)
+                                k as blas_index,               // k, cols of Op(a)
+                                gemm_scalar_cast!($ty, alpha), // alpha
+                                a._ptr().as_ptr() as *const _, // a
+                                lda,                           // lda
+                                b._ptr().as_ptr() as *const _, // b
+                                ldb,                           // ldb
+                                gemm_scalar_cast!($ty, beta),  // beta
+                                c._ptr().as_ptr() as *mut _,   // c
+                                ldc,                           // ldc
                             );
                         }
                         return;
@@ -705,15 +694,15 @@ unsafe fn general_mat_vec_mul_impl<A>(
                             blas_sys::$gemv(
                                 cblas_layout,
                                 a_trans,
-                                m as blas_index,            // m, rows of Op(a)
-                                k as blas_index,            // n, cols of Op(a)
-                                cast_as(&alpha),            // alpha
+                                m as blas_index,               // m, rows of Op(a)
+                                k as blas_index,               // n, cols of Op(a)
+                                cast_as(&alpha),               // alpha
                                 a._ptr().as_ptr() as *const _, // a
-                                a_stride,                   // lda
-                                x_ptr as *const _,          // x
+                                a_stride,                      // lda
+                                x_ptr as *const _,             // x
                                 x_stride,
-                                cast_as(&beta),             // beta
-                                y_ptr as *mut _,            // y
+                                cast_as(&beta),  // beta
+                                y_ptr as *mut _, // y
                                 y_stride,
                             );
                             return;
@@ -783,8 +772,12 @@ fn same_type<A: 'static, B: 'static>() -> bool
 // **Panics** if `A` and `B` are not the same type
 fn cast_as<A: 'static + Copy, B: 'static + Copy>(a: &A) -> B
 {
-    assert!(same_type::<A, B>(), "expect type {} and {} to match",
-            std::any::type_name::<A>(), std::any::type_name::<B>());
+    assert!(
+        same_type::<A, B>(),
+        "expect type {} and {} to match",
+        std::any::type_name::<A>(),
+        std::any::type_name::<B>()
+    );
     unsafe { ::std::ptr::read(a as *const _ as *const B) }
 }
 

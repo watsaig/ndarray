@@ -410,18 +410,8 @@ fn to_abs_slice(axis_len: usize, slice: Slice) -> (usize, usize, isize)
     if end < start {
         end = start;
     }
-    ndassert!(
-        start <= axis_len,
-        "Slice begin {} is past end of axis of length {}",
-        start,
-        axis_len,
-    );
-    ndassert!(
-        end <= axis_len,
-        "Slice end {} is past end of axis of length {}",
-        end,
-        axis_len,
-    );
+    ndassert!(start <= axis_len, "Slice begin {} is past end of axis of length {}", start, axis_len,);
+    ndassert!(end <= axis_len, "Slice end {} is past end of axis of length {}", end, axis_len,);
     ndassert!(step != 0, "Slice stride must not be zero");
     (start, end, step)
 }
@@ -1100,14 +1090,8 @@ mod test
         assert_eq!(slice_min_max(10, Slice::new(-8, Some(8), -3)), Some((4, 7)));
         assert_eq!(slice_min_max(10, Slice::new(1, Some(-2), -3)), Some((1, 7)));
         assert_eq!(slice_min_max(10, Slice::new(2, Some(-2), -3)), Some((4, 7)));
-        assert_eq!(
-            slice_min_max(10, Slice::new(-9, Some(-2), -3)),
-            Some((1, 7))
-        );
-        assert_eq!(
-            slice_min_max(10, Slice::new(-8, Some(-2), -3)),
-            Some((4, 7))
-        );
+        assert_eq!(slice_min_max(10, Slice::new(-9, Some(-2), -3)), Some((1, 7)));
+        assert_eq!(slice_min_max(10, Slice::new(-8, Some(-2), -3)), Some((4, 7)));
         assert_eq!(slice_min_max(9, Slice::new(2, None, -3)), Some((2, 8)));
         assert_eq!(slice_min_max(9, Slice::new(-7, None, -3)), Some((2, 8)));
         assert_eq!(slice_min_max(9, Slice::new(3, None, -3)), Some((5, 8)));
@@ -1117,46 +1101,18 @@ mod test
     #[test]
     fn slices_intersect_true()
     {
-        assert!(slices_intersect(
-            &Dim([4, 5]),
-            s![NewAxis, .., NewAxis, ..],
-            s![.., NewAxis, .., NewAxis]
-        ));
-        assert!(slices_intersect(
-            &Dim([4, 5]),
-            s![NewAxis, 0, ..],
-            s![0, ..]
-        ));
-        assert!(slices_intersect(
-            &Dim([4, 5]),
-            s![..;2, ..],
-            s![..;3, NewAxis, ..]
-        ));
-        assert!(slices_intersect(
-            &Dim([4, 5]),
-            s![.., ..;2],
-            s![.., 1..;3, NewAxis]
-        ));
+        assert!(slices_intersect(&Dim([4, 5]), s![NewAxis, .., NewAxis, ..], s![.., NewAxis, .., NewAxis]));
+        assert!(slices_intersect(&Dim([4, 5]), s![NewAxis, 0, ..], s![0, ..]));
+        assert!(slices_intersect(&Dim([4, 5]), s![..;2, ..], s![..;3, NewAxis, ..]));
+        assert!(slices_intersect(&Dim([4, 5]), s![.., ..;2], s![.., 1..;3, NewAxis]));
         assert!(slices_intersect(&Dim([4, 10]), s![.., ..;9], s![.., 3..;6]));
     }
 
     #[test]
     fn slices_intersect_false()
     {
-        assert!(!slices_intersect(
-            &Dim([4, 5]),
-            s![..;2, ..],
-            s![NewAxis, 1..;2, ..]
-        ));
-        assert!(!slices_intersect(
-            &Dim([4, 5]),
-            s![..;2, NewAxis, ..],
-            s![1..;3, ..]
-        ));
-        assert!(!slices_intersect(
-            &Dim([4, 5]),
-            s![.., ..;9],
-            s![.., 3..;6, NewAxis]
-        ));
+        assert!(!slices_intersect(&Dim([4, 5]), s![..;2, ..], s![NewAxis, 1..;2, ..]));
+        assert!(!slices_intersect(&Dim([4, 5]), s![..;2, NewAxis, ..], s![1..;3, ..]));
+        assert!(!slices_intersect(&Dim([4, 5]), s![.., ..;9], s![.., 3..;6, NewAxis]));
     }
 }

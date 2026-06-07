@@ -229,7 +229,7 @@ impl<'a, A, D: Dimension> NdProducer for AxisWindows<'a, A, D>
         )
     }
 
-    private_impl!{}
+    private_impl! {}
 }
 
 impl<'a, A, D> IntoIterator for AxisWindows<'a, A, D>
@@ -256,10 +256,7 @@ where D: Dimension
 {
     ndassert!(
         a.ndim() == window.ndim(),
-        concat!(
-            "Window dimension {} does not match array dimension {} ",
-            "(with array of shape {:?})"
-        ),
+        concat!("Window dimension {} does not match array dimension {} ", "(with array of shape {:?})"),
         window.ndim(),
         a.ndim(),
         a.shape()
@@ -267,10 +264,7 @@ where D: Dimension
 
     ndassert!(
         a.ndim() == strides.ndim(),
-        concat!(
-            "Stride dimension {} does not match array dimension {} ",
-            "(with array of shape {:?})"
-        ),
+        concat!("Stride dimension {} does not match array dimension {} ", "(with array of shape {:?})"),
         strides.ndim(),
         a.ndim(),
         a.shape()

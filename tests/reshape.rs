@@ -139,7 +139,10 @@ fn to_shape_add_axis()
     let u = v.to_shape(((4, 2), Order::RowMajor)).unwrap();
 
     assert!(u.to_shape(((1, 4, 2), Order::RowMajor)).unwrap().is_view());
-    assert!(u.to_shape(((1, 4, 2), Order::ColumnMajor)).unwrap().is_view());
+    assert!(u
+        .to_shape(((1, 4, 2), Order::ColumnMajor))
+        .unwrap()
+        .is_view());
 }
 
 #[test]
@@ -202,11 +205,21 @@ fn to_shape_discontig()
             let v1 = a1.to_shape(((4, 2, 4), order)).unwrap();
             assert!(v1.is_view());
             let v1 = a1.to_shape(((8, 4), order)).unwrap();
-            assert_eq!(v1.is_view(), order == create_order && create_order == Order::C,
-                       "failed for {:?}, {:?}", create_order, order);
+            assert_eq!(
+                v1.is_view(),
+                order == create_order && create_order == Order::C,
+                "failed for {:?}, {:?}",
+                create_order,
+                order
+            );
             let v1 = a1.to_shape(((4, 8), order)).unwrap();
-            assert_eq!(v1.is_view(), order == create_order && create_order == Order::F,
-                       "failed for {:?}, {:?}", create_order, order);
+            assert_eq!(
+                v1.is_view(),
+                order == create_order && create_order == Order::F,
+                "failed for {:?}, {:?}",
+                create_order,
+                order
+            );
             let v1 = a1.to_shape((32, order)).unwrap();
             assert!(!v1.is_view());
         }
@@ -225,13 +238,24 @@ fn to_shape_broadcast()
 
         for &order in &[Order::C, Order::F] {
             let v2 = v1.to_shape(((2, 2, 2, 2, 2, 2), order)).unwrap();
-            assert_eq!(v2.strides(), match (create_order, order) {
-                (Order::C, Order::C) => { &[32, 16, 0, 0, 2, 1] }
-                (Order::C, Order::F) => { &[16, 32, 0, 0, 1, 2] }
-                (Order::F, Order::C) => { &[2, 1, 0, 0, 32, 16] }
-                (Order::F, Order::F) => { &[1, 2, 0, 0, 16, 32] }
-                _other => unreachable!()
-            });
+            assert_eq!(
+                v2.strides(),
+                match (create_order, order) {
+                    (Order::C, Order::C) => {
+                        &[32, 16, 0, 0, 2, 1]
+                    }
+                    (Order::C, Order::F) => {
+                        &[16, 32, 0, 0, 1, 2]
+                    }
+                    (Order::F, Order::C) => {
+                        &[2, 1, 0, 0, 32, 16]
+                    }
+                    (Order::F, Order::F) => {
+                        &[1, 2, 0, 0, 16, 32]
+                    }
+                    _other => unreachable!(),
+                }
+            );
 
             let v2 = v1.to_shape(((4, 4, 4), order)).unwrap();
             assert!(v2.is_view());

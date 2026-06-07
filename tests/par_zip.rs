@@ -125,8 +125,7 @@ fn test_zip_small_collect()
 
                     assert_abs_diff_eq!(a, &b + &c, epsilon = 1e-6);
                     if m > 1 && n > 1 {
-                        assert_eq!(a.strides(), b.strides(),
-                            "Failure for {}x{} c/f: {:?}", m, n, is_f);
+                        assert_eq!(a.strides(), b.strides(), "Failure for {}x{} c/f: {:?}", m, n, is_f);
                     }
                 }
             }

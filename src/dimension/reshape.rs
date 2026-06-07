@@ -153,14 +153,12 @@ fn test_reshape()
     macro_rules! test_reshape {
         (fail $order:ident from $from:expr, $stride:expr, to $to:expr) => {
             let res = reshape_dim(&Dim($from), &Dim($stride), &Dim($to), Order::$order);
-            println!("Reshape {:?} {:?} to {:?}, order {:?}\n  => {:?}",
-                     $from, $stride, $to, Order::$order, res);
+            println!("Reshape {:?} {:?} to {:?}, order {:?}\n  => {:?}", $from, $stride, $to, Order::$order, res);
             let _res = res.expect_err("Expected failed reshape");
         };
         (ok $order:ident from $from:expr, $stride:expr, to $to:expr, $to_stride:expr) => {{
             let res = reshape_dim(&Dim($from), &Dim($stride), &Dim($to), Order::$order);
-            println!("Reshape {:?} {:?} to {:?}, order {:?}\n  => {:?}",
-                     $from, $stride, $to, Order::$order, res);
+            println!("Reshape {:?} {:?} to {:?}, order {:?}\n  => {:?}", $from, $stride, $to, Order::$order, res);
             println!("default stride for from dim: {:?}", Dim($from).default_strides());
             println!("default stride for to dim: {:?}", Dim($to).default_strides());
             let res = res.expect("Expected successful reshape");

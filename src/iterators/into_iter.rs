@@ -93,8 +93,12 @@ where D: Dimension
         unsafe {
             let data_ptr = self.array_data.as_nonnull_mut();
             let view = RawArrayViewMut::new(self.array_head_ptr, self.inner.dim.clone(), self.inner.strides.clone());
-            debug_assert!(self.inner.dim.size() < self.data_len, "data_len {} and dim size {}",
-                          self.data_len, self.inner.dim.size());
+            debug_assert!(
+                self.inner.dim.size() < self.data_len,
+                "data_len {} and dim size {}",
+                self.data_len,
+                self.inner.dim.size()
+            );
             drop_unreachable_raw(view, data_ptr, self.data_len);
         }
     }
