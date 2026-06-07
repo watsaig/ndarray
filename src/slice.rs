@@ -588,7 +588,8 @@ where
 
 macro_rules! impl_tryfrom_array_for_sliceinfo {
     ($len:expr) => {
-        impl<Din, Dout> TryFrom<[SliceInfoElem; $len]> for SliceInfo<[SliceInfoElem; $len], Din, Dout>
+        impl<Din, Dout> TryFrom<[SliceInfoElem; $len]>
+            for SliceInfo<[SliceInfoElem; $len], Din, Dout>
         where
             Din: Dimension,
             Dout: Dimension,

@@ -147,7 +147,12 @@ fn as_slice()
     let a = a.into_shape_with_order((8, 1)).unwrap();
     assert_slice_correct(&a);
     let u = a.slice(s![..;2, ..]);
-    println!("u={:?}, shape={:?}, strides={:?}", u, u.shape(), u.strides());
+    println!(
+        "u={:?}, shape={:?}, strides={:?}",
+        u,
+        u.shape(),
+        u.strides()
+    );
     assert!(u.as_slice().is_none());
 }
 
@@ -276,10 +281,11 @@ fn axis_iter()
     //  [[6, 7],
     //   [8, 9],
     //    ...
-    assert_equal(
-        a.axis_iter(Axis(1)),
-        vec![a.index_axis(Axis(1), 0), a.index_axis(Axis(1), 1), a.index_axis(Axis(1), 2)],
-    );
+    assert_equal(a.axis_iter(Axis(1)), vec![
+            a.index_axis(Axis(1), 0),
+            a.index_axis(Axis(1), 1),
+            a.index_axis(Axis(1), 2),
+        ]);
 }
 
 #[test]
@@ -556,7 +562,11 @@ fn axis_chunks_iter_corner_cases()
     let it = a.axis_chunks_iter(Axis(0), 8);
     assert_equal(it, vec![a.view()]);
     let it = a.axis_chunks_iter(Axis(0), 3);
-    assert_equal(it, vec![array![[7], [6], [5]], array![[4], [3], [2]], array![[1], [0]]]);
+    assert_equal(it, vec![
+            array![[7], [6], [5]],
+            array![[4], [3], [2]],
+            array![[1], [0]],
+        ]);
 
     let b = ArcArray::<f32, _>::zeros((8, 2));
     let a = b.slice(s![1..;2,..]);
@@ -928,7 +938,10 @@ fn test_rfold()
             acc.push(*elt);
             acc
         });
-        assert_eq!(Array1::from(output), Array::from_iter((1..10).rev().map(|i| i * 2)));
+        assert_eq!(
+            Array1::from(output),
+            Array::from_iter((1..10).rev().map(|i| i * 2))
+        );
     }
 }
 

@@ -216,14 +216,9 @@ where
         let diff = &c - &reference;
         let max_diff = diff.iter().copied().fold(A::zero(), A::max);
         let max_elt = reference.iter().copied().fold(A::zero(), A::max);
-        println!("Max elt diff={:?}, max={:?}, ratio={:.4e}", max_diff, max_elt, (max_diff / max_elt).as_());
-        assert!(
-            (max_diff / max_elt).as_() < limit,
-            "Expected relative norm diff < {:e}, found {:?} / {:?}",
-            limit,
-            max_diff,
-            max_elt
-        );
+        println!("Max elt diff={:?}, max={:?}, ratio={:.4e}", max_diff, max_elt, (max_diff/max_elt).as_());
+        assert!((max_diff / max_elt).as_() < limit,
+                "Expected relative norm diff < {:e}, found {:?} / {:?}", limit, max_diff, max_elt);
     }
 }
 
@@ -254,14 +249,9 @@ where
         let max_elt = |elt: &Complex<_>| A::max(A::abs(elt.re), A::abs(elt.im));
         let max_diff = diff.iter().map(max_elt).fold(A::zero(), A::max);
         let max_elt = reference.iter().map(max_elt).fold(A::zero(), A::max);
-        println!("Max elt diff={:?}, max={:?}, ratio={:.4e}", max_diff, max_elt, (max_diff / max_elt).as_());
-        assert!(
-            (max_diff / max_elt).as_() < limit,
-            "Expected relative norm diff < {:e}, found {:?} / {:?}",
-            limit,
-            max_diff,
-            max_elt
-        );
+        println!("Max elt diff={:?}, max={:?}, ratio={:.4e}", max_diff, max_elt, (max_diff/max_elt).as_());
+        assert!((max_diff / max_elt).as_() < limit,
+                "Expected relative norm diff < {:e}, found {:?} / {:?}", limit, max_diff, max_elt);
     }
 }
 

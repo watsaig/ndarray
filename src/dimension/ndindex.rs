@@ -197,14 +197,26 @@ unsafe impl<const N: usize> NdIndex<IxDyn> for Dim<[Ix; N]>
     #[inline]
     fn index_checked(&self, dim: &IxDyn, strides: &IxDyn) -> Option<isize>
     {
-        debug_assert_eq!(strides.ndim(), N, "Attempted to index with {:?} in array with {} axes", self, strides.ndim());
+        debug_assert_eq!(
+            strides.ndim(),
+            N,
+            "Attempted to index with {:?} in array with {} axes",
+            self,
+            strides.ndim()
+        );
         stride_offset_checked(dim.ix(), strides.ix(), self.ix())
     }
 
     #[inline]
     fn index_unchecked(&self, strides: &IxDyn) -> isize
     {
-        debug_assert_eq!(strides.ndim(), N, "Attempted to index with {:?} in array with {} axes", self, strides.ndim());
+        debug_assert_eq!(
+            strides.ndim(),
+            N,
+            "Attempted to index with {:?} in array with {} axes",
+            self,
+            strides.ndim()
+        );
         (0..N)
             .map(|i| stride_offset(get!(self, i), get!(strides, i)))
             .sum()
@@ -217,14 +229,26 @@ unsafe impl<const N: usize> NdIndex<IxDyn> for [Ix; N]
     #[inline]
     fn index_checked(&self, dim: &IxDyn, strides: &IxDyn) -> Option<isize>
     {
-        debug_assert_eq!(strides.ndim(), N, "Attempted to index with {:?} in array with {} axes", self, strides.ndim());
+        debug_assert_eq!(
+            strides.ndim(),
+            N,
+            "Attempted to index with {:?} in array with {} axes",
+            self,
+            strides.ndim()
+        );
         stride_offset_checked(dim.ix(), strides.ix(), self)
     }
 
     #[inline]
     fn index_unchecked(&self, strides: &IxDyn) -> isize
     {
-        debug_assert_eq!(strides.ndim(), N, "Attempted to index with {:?} in array with {} axes", self, strides.ndim());
+        debug_assert_eq!(
+            strides.ndim(),
+            N,
+            "Attempted to index with {:?} in array with {} axes",
+            self,
+            strides.ndim()
+        );
         (0..N)
             .map(|i| stride_offset(self[i], get!(strides, i)))
             .sum()

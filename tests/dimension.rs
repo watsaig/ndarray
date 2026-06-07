@@ -20,7 +20,10 @@ fn insert_axis()
 
     assert_eq!(Dim([2, 3, 4]).insert_axis(Axis(2)), Dim([2, 3, 1, 4]));
 
-    assert_eq!(Dim([2, 3, 4, 5, 6, 7]).insert_axis(Axis(2)), Dim(vec![2, 3, 1, 4, 5, 6, 7]));
+    assert_eq!(
+        Dim([2, 3, 4, 5, 6, 7]).insert_axis(Axis(2)),
+        Dim(vec![2, 3, 1, 4, 5, 6, 7])
+    );
 
     assert_eq!(Dim(vec![]).insert_axis(Axis(0)), Dim(vec![1]));
 
@@ -28,8 +31,14 @@ fn insert_axis()
     assert_eq!(Dim(vec![2, 3]).insert_axis(Axis(1)), Dim(vec![2, 1, 3]));
     assert_eq!(Dim(vec![2, 3]).insert_axis(Axis(2)), Dim(vec![2, 3, 1]));
 
-    assert_eq!(Dim(vec![2, 3, 4, 5, 6]).insert_axis(Axis(2)), Dim(vec![2, 3, 1, 4, 5, 6]));
-    assert_eq!(Dim(vec![2, 3, 4, 5, 6, 7]).insert_axis(Axis(2)), Dim(vec![2, 3, 1, 4, 5, 6, 7]));
+    assert_eq!(
+        Dim(vec![2, 3, 4, 5, 6]).insert_axis(Axis(2)),
+        Dim(vec![2, 3, 1, 4, 5, 6])
+    );
+    assert_eq!(
+        Dim(vec![2, 3, 4, 5, 6, 7]).insert_axis(Axis(2)),
+        Dim(vec![2, 3, 1, 4, 5, 6, 7])
+    );
 }
 
 #[test]
@@ -124,18 +133,31 @@ fn fastest_varying_order()
     assert_eq!(order.slice(), &[3, 0, 2, 1]);
 
     assert_eq!(Dim([1, 3])._fastest_varying_stride_order(), Dim([0, 1]));
-    assert_eq!(Dim([1, -3isize as usize])._fastest_varying_stride_order(), Dim([0, 1]));
+    assert_eq!(
+        Dim([1, -3isize as usize])._fastest_varying_stride_order(),
+        Dim([0, 1])
+    );
     assert_eq!(Dim([7, 2])._fastest_varying_stride_order(), Dim([1, 0]));
-    assert_eq!(Dim([-7isize as usize, 2])._fastest_varying_stride_order(), Dim([1, 0]));
-    assert_eq!(Dim([6, 1, 3])._fastest_varying_stride_order(), Dim([1, 2, 0]));
-    assert_eq!(Dim([-6isize as usize, 1, -3isize as usize])._fastest_varying_stride_order(), Dim([1, 2, 0]));
+    assert_eq!(
+        Dim([-7isize as usize, 2])._fastest_varying_stride_order(),
+        Dim([1, 0])
+    );
+    assert_eq!(
+        Dim([6, 1, 3])._fastest_varying_stride_order(),
+        Dim([1, 2, 0])
+    );
+    assert_eq!(
+        Dim([-6isize as usize, 1, -3isize as usize])._fastest_varying_stride_order(),
+        Dim([1, 2, 0])
+    );
 
     // it's important that it produces distinct indices. Prefer the stable order
     // where 0 is before 1 when they are equal.
     assert_eq!(Dim([2, 2])._fastest_varying_stride_order(), [0, 1]);
     assert_eq!(Dim([2, 2, 1])._fastest_varying_stride_order(), [2, 0, 1]);
     assert_eq!(
-        Dim([-2isize as usize, -2isize as usize, 3, 1, -2isize as usize])._fastest_varying_stride_order(),
+        Dim([-2isize as usize, -2isize as usize, 3, 1, -2isize as usize])
+            ._fastest_varying_stride_order(),
         [3, 0, 1, 4, 2]
     );
 }

@@ -221,7 +221,13 @@ impl<A: fmt::Debug, D: Dimension> fmt::Debug for ArrayRef<A, D>
         format_array(self, f, <_>::fmt, &fmt_opt)?;
 
         // Add extra information for Debug
-        write!(f, ", shape={:?}, strides={:?}, layout={:?}", self.shape(), self.strides(), self.view().layout(),)?;
+        write!(
+            f,
+            ", shape={:?}, strides={:?}, layout={:?}",
+            self.shape(),
+            self.strides(),
+            self.view().layout(),
+        )?;
         match D::NDIM {
             Some(ndim) => write!(f, ", const ndim={}", ndim)?,
             None => write!(f, ", dynamic ndim={}", self.ndim())?,
@@ -349,7 +355,12 @@ mod formatting_with_omit
     fn assert_str_eq(expected: &str, actual: &str)
     {
         // use assert to avoid printing the strings twice on failure
-        assert!(expected == actual, "formatting assertion failed\nexpected:\n{}\nactual:\n{}\n", expected, actual,);
+        assert!(
+            expected == actual,
+            "formatting assertion failed\nexpected:\n{}\nactual:\n{}\n",
+            expected,
+            actual,
+        );
     }
 
     fn ellipsize(limit: usize, sep: &str, elements: impl IntoIterator<Item = impl fmt::Display>) -> String
@@ -445,7 +456,10 @@ mod formatting_with_omit
         let a = Array2::from_elem((ARRAY_MANY_ELEMENT_LIMIT / 10, 10), 1);
         let actual = format!("{}", a);
         let row = format!("{}", a.row(0));
-        let expected = format!("[{}]", ellipsize(AXIS_LIMIT_COL, ",\n ", (0..a.nrows()).map(|_| &row)));
+        let expected = format!(
+            "[{}]",
+            ellipsize(AXIS_LIMIT_COL, ",\n ", (0..a.nrows()).map(|_| &row))
+        );
         assert_str_eq(&expected, &actual);
     }
 
@@ -466,7 +480,10 @@ mod formatting_with_omit
         let a = Array2::from_elem((AXIS_2D_OVERFLOW_LIMIT + overflow, AXIS_2D_OVERFLOW_LIMIT + overflow), 1);
         let actual = format!("{}", a);
         let row = format!("[{}]", ellipsize(AXIS_LIMIT_ROW, ", ", a.row(0)));
-        let expected = format!("[{}]", ellipsize(AXIS_LIMIT_COL, ",\n ", (0..a.nrows()).map(|_| &row)));
+        let expected = format!(
+            "[{}]",
+            ellipsize(AXIS_LIMIT_COL, ",\n ", (0..a.nrows()).map(|_| &row))
+        );
         assert_str_eq(&expected, &actual);
     }
 

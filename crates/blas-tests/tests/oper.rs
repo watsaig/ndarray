@@ -315,7 +315,12 @@ fn gemm_c64_1_f()
     let mut y = range_mat_complex64(m, 1);
     let answer = reference_mat_mul(&a, &x) + &y;
     general_mat_mul(Complex64::new(1.0, 0.), &a, &x, Complex64::new(1.0, 0.), &mut y);
-    assert_relative_eq!(y.mapv(|i| i.norm_sqr()), answer.mapv(|i| i.norm_sqr()), epsilon = 1e-12, max_relative = 1e-7);
+    assert_relative_eq!(
+        y.mapv(|i| i.norm_sqr()),
+        answer.mapv(|i| i.norm_sqr()),
+        epsilon = 1e-12,
+        max_relative = 1e-7
+    );
 }
 
 #[test]
@@ -328,7 +333,12 @@ fn gemm_c32_1_f()
     let mut y = range_mat_complex(m, 1);
     let answer = reference_mat_mul(&a, &x) + &y;
     general_mat_mul(Complex32::new(1.0, 0.), &a, &x, Complex32::new(1.0, 0.), &mut y);
-    assert_relative_eq!(y.mapv(|i| i.norm_sqr()), answer.mapv(|i| i.norm_sqr()), epsilon = 1e-12, max_relative = 1e-7);
+    assert_relative_eq!(
+        y.mapv(|i| i.norm_sqr()),
+        answer.mapv(|i| i.norm_sqr()),
+        epsilon = 1e-12,
+        max_relative = 1e-7
+    );
 }
 
 #[test]
@@ -343,7 +353,12 @@ fn gemm_c64_actually_complex()
     let beta = Complex64::new(1.0, 1.0);
     let answer = alpha * reference_mat_mul(&a, &b) + beta * &y;
     general_mat_mul(alpha.clone(), &a, &b, beta.clone(), &mut y);
-    assert_relative_eq!(y.mapv(|i| i.norm_sqr()), answer.mapv(|i| i.norm_sqr()), epsilon = 1e-12, max_relative = 1e-7);
+    assert_relative_eq!(
+        y.mapv(|i| i.norm_sqr()),
+        answer.mapv(|i| i.norm_sqr()),
+        epsilon = 1e-12,
+        max_relative = 1e-7
+    );
 }
 
 #[test]
@@ -351,7 +366,17 @@ fn gen_mat_vec_mul()
 {
     let alpha = -2.3;
     let beta = 3.14;
-    let sizes = vec![(4, 4), (8, 8), (17, 15), (4, 17), (17, 3), (19, 18), (16, 17), (15, 16), (67, 63)];
+    let sizes = vec![
+        (4, 4),
+        (8, 8),
+        (17, 15),
+        (4, 17),
+        (17, 3),
+        (19, 18),
+        (16, 17),
+        (15, 16),
+        (67, 63),
+    ];
     // test different strides
     for &s1 in &[1, 2, -1, -2] {
         for &s2 in &[1, 2, -1, -2] {
@@ -383,7 +408,17 @@ fn gen_mat_vec_mul()
 #[test]
 fn vec_mat_mul()
 {
-    let sizes = vec![(4, 4), (8, 8), (17, 15), (4, 17), (17, 3), (19, 18), (16, 17), (15, 16), (67, 63)];
+    let sizes = vec![
+        (4, 4),
+        (8, 8),
+        (17, 15),
+        (4, 17),
+        (17, 3),
+        (19, 18),
+        (16, 17),
+        (15, 16),
+        (67, 63),
+    ];
     // test different strides
     for &s1 in &[1, 2, -1, -2] {
         for &s2 in &[1, 2, -1, -2] {

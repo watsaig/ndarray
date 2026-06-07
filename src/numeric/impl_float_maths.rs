@@ -314,7 +314,7 @@ mod angle_tests
     fn test_complex_numbers_radians()
     {
         let arr = Array::from_vec(vec![
-            Complex::new(1.0f64, 0.0), // 0
+            Complex::new(1.0f64, 0.0),    // 0
             Complex::new(0.0, 1.0),    // π/2
             Complex::new(-1.0, 0.0),   // π
             Complex::new(0.0, -1.0),   // -π/2

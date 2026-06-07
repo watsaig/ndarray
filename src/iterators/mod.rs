@@ -886,7 +886,13 @@ impl<A, D: Dimension> AxisIterCore<A, D>
     #[inline]
     unsafe fn offset(&self, index: usize) -> *mut A
     {
-        debug_assert!(index < self.end, "index={}, end={}, stride={}", index, self.end, self.stride);
+        debug_assert!(
+            index < self.end,
+            "index={}, end={}, stride={}",
+            index,
+            self.end,
+            self.stride
+        );
         self.ptr.offset(index as isize * self.stride)
     }
 
@@ -1398,9 +1404,21 @@ macro_rules! chunk_iter_impl {
         {
             fn get_subview(&self, index: usize, ptr: *mut A) -> $array<'a, A, D> {
                 if index != self.partial_chunk_index {
-                    unsafe { $array::new_(ptr, self.iter.inner_dim.clone(), self.iter.inner_strides.clone()) }
+                    unsafe {
+                        $array::new_(
+                            ptr,
+                            self.iter.inner_dim.clone(),
+                            self.iter.inner_strides.clone(),
+                        )
+                    }
                 } else {
-                    unsafe { $array::new_(ptr, self.partial_chunk_dim.clone(), self.iter.inner_strides.clone()) }
+                    unsafe {
+                        $array::new_(
+                            ptr,
+                            self.partial_chunk_dim.clone(),
+                            self.iter.inner_strides.clone(),
+                        )
+                    }
                 }
             }
 

@@ -50,7 +50,10 @@ impl<'a, A, D: Dimension> ExactChunks<'a, A, D>
         let chunk = chunk.into_dimension();
         ndassert!(
             a.ndim() == chunk.ndim(),
-            concat!("Chunk dimension {} does not match array dimension {} ", "(with array of shape {:?})"),
+            concat!(
+                "Chunk dimension {} does not match array dimension {} ",
+                "(with array of shape {:?})"
+            ),
             chunk.ndim(),
             a.ndim(),
             a.shape()
@@ -146,7 +149,10 @@ impl<'a, A, D: Dimension> ExactChunksMut<'a, A, D>
         let chunk = chunk.into_dimension();
         ndassert!(
             a.ndim() == chunk.ndim(),
-            concat!("Chunk dimension {} does not match array dimension {} ", "(with array of shape {:?})"),
+            concat!(
+                "Chunk dimension {} does not match array dimension {} ",
+                "(with array of shape {:?})"
+            ),
             chunk.ndim(),
             a.ndim(),
             a.shape()

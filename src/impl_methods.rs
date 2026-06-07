@@ -1550,7 +1550,10 @@ impl<A, D: Dimension> ArrayRef<A, D>
             self.shape()
         );
 
-        ndassert!(stride_size > 0, "Stride size must be greater than zero");
+        ndassert!(
+            stride_size >0,
+            "Stride size must be greater than zero"
+        );
 
         AxisWindows::new_with_stride(self.view(), axis, window_size, stride_size)
     }

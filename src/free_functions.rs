@@ -142,7 +142,10 @@ pub const fn aview0<A>(x: &A) -> ArrayView0<'_, A>
 pub const fn aview1<A>(xs: &[A]) -> ArrayView1<'_, A>
 {
     if size_of::<A>() == 0 {
-        assert!(xs.len() <= isize::MAX as usize, "Slice length must fit in `isize`.",);
+        assert!(
+            xs.len() <= isize::MAX as usize,
+            "Slice length must fit in `isize`.",
+        );
     }
     ArrayBase {
         data: ViewRepr::new(),
@@ -180,14 +183,19 @@ pub const fn aview2<A, const N: usize>(xs: &[[A; N]]) -> ArrayView2<'_, A>
     if size_of::<A>() == 0 {
         if let Some(n_elems) = rows.checked_mul(cols) {
             assert!(
-                rows <= isize::MAX as usize && cols <= isize::MAX as usize && n_elems <= isize::MAX as usize,
+                rows <= isize::MAX as usize
+                    && cols <= isize::MAX as usize
+                    && n_elems <= isize::MAX as usize,
                 "Product of non-zero axis lengths must not overflow isize.",
             );
         } else {
             panic!("Overflow in number of elements.");
         }
     } else if N == 0 {
-        assert!(rows <= isize::MAX as usize, "Product of non-zero axis lengths must not overflow isize.",);
+        assert!(
+            rows <= isize::MAX as usize,
+            "Product of non-zero axis lengths must not overflow isize.",
+        );
     }
     // Safe because references are always non-null.
     let ptr = unsafe { NonNull::new_unchecked(xs.as_ptr() as *mut A) };
@@ -555,16 +563,7 @@ mod meshgrid_impl
 
         fn meshgrid(arrays: Self, indexing: MeshIndex) -> Self::Output
         {
-            meshgrid_body!(
-                6,
-                indexing,
-                (arrays.0, 0),
-                (arrays.1, 1),
-                (arrays.2, 2),
-                (arrays.3, 3),
-                (arrays.4, 4),
-                (arrays.5, 5)
-            )
+            meshgrid_body!(6, indexing, (arrays.0, 0), (arrays.1, 1), (arrays.2, 2), (arrays.3, 3), (arrays.4, 4), (arrays.5, 5))
         }
     }
 
@@ -684,59 +683,41 @@ mod tests
         let y = array![4, 5, 6, 7];
         let z = array![-1, -2];
         let (xx, yy, zz) = meshgrid((&x, &y, &z), MeshIndex::XY);
-        assert_eq!(
-            xx,
-            array![
-                [[1, 1], [2, 2], [3, 3]],
-                [[1, 1], [2, 2], [3, 3]],
-                [[1, 1], [2, 2], [3, 3]],
-                [[1, 1], [2, 2], [3, 3]],
-            ]
-        );
-        assert_eq!(
-            yy,
-            array![
-                [[4, 4], [4, 4], [4, 4]],
-                [[5, 5], [5, 5], [5, 5]],
-                [[6, 6], [6, 6], [6, 6]],
-                [[7, 7], [7, 7], [7, 7]],
-            ]
-        );
-        assert_eq!(
-            zz,
-            array![
-                [[-1, -2], [-1, -2], [-1, -2]],
-                [[-1, -2], [-1, -2], [-1, -2]],
-                [[-1, -2], [-1, -2], [-1, -2]],
-                [[-1, -2], [-1, -2], [-1, -2]],
-            ]
-        );
+        assert_eq!(xx, array![
+            [[1, 1], [2, 2], [3, 3]],
+            [[1, 1], [2, 2], [3, 3]],
+            [[1, 1], [2, 2], [3, 3]],
+            [[1, 1], [2, 2], [3, 3]],
+        ]);
+        assert_eq!(yy, array![
+            [[4, 4], [4, 4], [4, 4]],
+            [[5, 5], [5, 5], [5, 5]],
+            [[6, 6], [6, 6], [6, 6]],
+            [[7, 7], [7, 7], [7, 7]],
+        ]);
+        assert_eq!(zz, array![
+            [[-1, -2], [-1, -2], [-1, -2]],
+            [[-1, -2], [-1, -2], [-1, -2]],
+            [[-1, -2], [-1, -2], [-1, -2]],
+            [[-1, -2], [-1, -2], [-1, -2]],
+        ]);
 
         let (xx, yy, zz) = meshgrid((&x, &y, &z), MeshIndex::IJ);
-        assert_eq!(
-            xx,
-            array![
-                [[1, 1], [1, 1], [1, 1], [1, 1]],
-                [[2, 2], [2, 2], [2, 2], [2, 2]],
-                [[3, 3], [3, 3], [3, 3], [3, 3]],
-            ]
-        );
-        assert_eq!(
-            yy,
-            array![
-                [[4, 4], [5, 5], [6, 6], [7, 7]],
-                [[4, 4], [5, 5], [6, 6], [7, 7]],
-                [[4, 4], [5, 5], [6, 6], [7, 7]],
-            ]
-        );
-        assert_eq!(
-            zz,
-            array![
-                [[-1, -2], [-1, -2], [-1, -2], [-1, -2]],
-                [[-1, -2], [-1, -2], [-1, -2], [-1, -2]],
-                [[-1, -2], [-1, -2], [-1, -2], [-1, -2]],
-            ]
-        );
+        assert_eq!(xx, array![
+            [[1, 1], [1, 1], [1, 1], [1, 1]],
+            [[2, 2], [2, 2], [2, 2], [2, 2]],
+            [[3, 3], [3, 3], [3, 3], [3, 3]],
+        ]);
+        assert_eq!(yy, array![
+            [[4, 4], [5, 5], [6, 6], [7, 7]],
+            [[4, 4], [5, 5], [6, 6], [7, 7]],
+            [[4, 4], [5, 5], [6, 6], [7, 7]],
+        ]);
+        assert_eq!(zz, array![
+            [[-1, -2], [-1, -2], [-1, -2], [-1, -2]],
+            [[-1, -2], [-1, -2], [-1, -2], [-1, -2]],
+            [[-1, -2], [-1, -2], [-1, -2], [-1, -2]],
+        ]);
     }
 
     #[test]

@@ -661,14 +661,54 @@ mod assign_ops
         };
     }
 
-    impl_assign_op!(AddAssign, add_assign, "Perform `self += rhs` as elementwise addition (in place).\n");
-    impl_assign_op!(SubAssign, sub_assign, "Perform `self -= rhs` as elementwise subtraction (in place).\n");
-    impl_assign_op!(MulAssign, mul_assign, "Perform `self *= rhs` as elementwise multiplication (in place).\n");
-    impl_assign_op!(DivAssign, div_assign, "Perform `self /= rhs` as elementwise division (in place).\n");
-    impl_assign_op!(RemAssign, rem_assign, "Perform `self %= rhs` as elementwise remainder (in place).\n");
-    impl_assign_op!(BitAndAssign, bitand_assign, "Perform `self &= rhs` as elementwise bit and (in place).\n");
-    impl_assign_op!(BitOrAssign, bitor_assign, "Perform `self |= rhs` as elementwise bit or (in place).\n");
-    impl_assign_op!(BitXorAssign, bitxor_assign, "Perform `self ^= rhs` as elementwise bit xor (in place).\n");
-    impl_assign_op!(ShlAssign, shl_assign, "Perform `self <<= rhs` as elementwise left shift (in place).\n");
-    impl_assign_op!(ShrAssign, shr_assign, "Perform `self >>= rhs` as elementwise right shift (in place).\n");
+    impl_assign_op!(
+        AddAssign,
+        add_assign,
+        "Perform `self += rhs` as elementwise addition (in place).\n"
+    );
+    impl_assign_op!(
+        SubAssign,
+        sub_assign,
+        "Perform `self -= rhs` as elementwise subtraction (in place).\n"
+    );
+    impl_assign_op!(
+        MulAssign,
+        mul_assign,
+        "Perform `self *= rhs` as elementwise multiplication (in place).\n"
+    );
+    impl_assign_op!(
+        DivAssign,
+        div_assign,
+        "Perform `self /= rhs` as elementwise division (in place).\n"
+    );
+    impl_assign_op!(
+        RemAssign,
+        rem_assign,
+        "Perform `self %= rhs` as elementwise remainder (in place).\n"
+    );
+    impl_assign_op!(
+        BitAndAssign,
+        bitand_assign,
+        "Perform `self &= rhs` as elementwise bit and (in place).\n"
+    );
+    impl_assign_op!(
+        BitOrAssign,
+        bitor_assign,
+        "Perform `self |= rhs` as elementwise bit or (in place).\n"
+    );
+    impl_assign_op!(
+        BitXorAssign,
+        bitxor_assign,
+        "Perform `self ^= rhs` as elementwise bit xor (in place).\n"
+    );
+    impl_assign_op!(
+        ShlAssign,
+        shl_assign,
+        "Perform `self <<= rhs` as elementwise left shift (in place).\n"
+    );
+    impl_assign_op!(
+        ShrAssign,
+        shr_assign,
+        "Perform `self >>= rhs` as elementwise right shift (in place).\n"
+    );
 }

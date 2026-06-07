@@ -121,10 +121,12 @@ fn windows_iterator_only_one_valid_window_for_oversized_stride()
 fn windows_iterator_1d_with_stride()
 {
     let a = Array::from_iter(10..20).into_shape_with_order(10).unwrap();
-    itertools::assert_equal(
-        a.windows_with_stride(4, 2),
-        vec![arr1(&[10, 11, 12, 13]), arr1(&[12, 13, 14, 15]), arr1(&[14, 15, 16, 17]), arr1(&[16, 17, 18, 19])],
-    );
+    itertools::assert_equal(a.windows_with_stride(4, 2), vec![
+            arr1(&[10, 11, 12, 13]),
+            arr1(&[12, 13, 14, 15]),
+            arr1(&[14, 15, 16, 17]),
+            arr1(&[16, 17, 18, 19]),
+        ]);
 }
 
 /// Simple test for iterating 2d-arrays via `Windows` with stride.
@@ -261,8 +263,16 @@ fn test_axis_windows_3d()
         .unwrap();
 
     itertools::assert_equal(a.axis_windows(Axis(1), 2), vec![
-            arr3(&[[[0, 1, 2], [3, 4, 5]], [[9, 10, 11], [12, 13, 14]], [[18, 19, 20], [21, 22, 23]]]),
-            arr3(&[[[3, 4, 5], [6, 7, 8]], [[12, 13, 14], [15, 16, 17]], [[21, 22, 23], [24, 25, 26]]]),
+            arr3(&[
+                [[0, 1, 2], [3, 4, 5]],
+                [[9, 10, 11], [12, 13, 14]],
+                [[18, 19, 20], [21, 22, 23]],
+            ]),
+            arr3(&[
+                [[3, 4, 5], [6, 7, 8]],
+                [[12, 13, 14], [15, 16, 17]],
+                [[21, 22, 23], [24, 25, 26]],
+            ]),
         ]);
 }
 
@@ -279,7 +289,7 @@ fn tests_axis_windows_3d_zips_with_1d()
         .for_each(|b, a| {
             *b = a.sum();
         });
-    assert_eq!(b, arr1(&[207, 261]));
+    assert_eq!(b,arr1(&[207, 261]));
 }
 
 /// Test verifies that non existent Axis results in panic
@@ -332,15 +342,16 @@ fn test_axis_windows_with_stride_1d()
 {
     let a = Array::from_iter(10..20).into_shape_with_order(10).unwrap();
 
-    itertools::assert_equal(
-        a.axis_windows_with_stride(Axis(0), 5, 2),
-        vec![arr1(&[10, 11, 12, 13, 14]), arr1(&[12, 13, 14, 15, 16]), arr1(&[14, 15, 16, 17, 18])],
-    );
+    itertools::assert_equal(a.axis_windows_with_stride(Axis(0), 5, 2), vec![
+        arr1(&[10, 11, 12, 13, 14]),
+        arr1(&[12, 13, 14, 15, 16]),
+        arr1(&[14, 15, 16, 17, 18]),
+    ]);
 
-    itertools::assert_equal(
-        a.axis_windows_with_stride(Axis(0), 5, 3),
-        vec![arr1(&[10, 11, 12, 13, 14]), arr1(&[13, 14, 15, 16, 17])],
-    );
+    itertools::assert_equal(a.axis_windows_with_stride(Axis(0), 5, 3), vec![
+        arr1(&[10, 11, 12, 13, 14]),
+        arr1(&[13, 14, 15, 16, 17]),
+    ]);
 }
 
 /// Simple test for iterating 2d-arrays via `Axis Windows`.
@@ -352,21 +363,21 @@ fn test_axis_windows_with_stride_2d()
         .unwrap();
 
     itertools::assert_equal(a.axis_windows_with_stride(Axis(0), 2, 1), vec![
-            arr2(&[[10, 11, 12, 13], [14, 15, 16, 17]]),
-            arr2(&[[14, 15, 16, 17], [18, 19, 20, 21]]),
-            arr2(&[[18, 19, 20, 21], [22, 23, 24, 25]]),
-            arr2(&[[22, 23, 24, 25], [26, 27, 28, 29]]),
-        ]);
+        arr2(&[[10, 11, 12, 13], [14, 15, 16, 17]]),
+        arr2(&[[14, 15, 16, 17], [18, 19, 20, 21]]),
+        arr2(&[[18, 19, 20, 21], [22, 23, 24, 25]]),
+        arr2(&[[22, 23, 24, 25], [26, 27, 28, 29]]),
+    ]);
 
-    itertools::assert_equal(
-        a.axis_windows_with_stride(Axis(0), 2, 2),
-        vec![arr2(&[[10, 11, 12, 13], [14, 15, 16, 17]]), arr2(&[[18, 19, 20, 21], [22, 23, 24, 25]])],
-    );
+    itertools::assert_equal(a.axis_windows_with_stride(Axis(0), 2, 2), vec![
+        arr2(&[[10, 11, 12, 13], [14, 15, 16, 17]]),
+        arr2(&[[18, 19, 20, 21], [22, 23, 24, 25]]),
+    ]);
 
-    itertools::assert_equal(
-        a.axis_windows_with_stride(Axis(0), 2, 3),
-        vec![arr2(&[[10, 11, 12, 13], [14, 15, 16, 17]]), arr2(&[[22, 23, 24, 25], [26, 27, 28, 29]])],
-    );
+    itertools::assert_equal(a.axis_windows_with_stride(Axis(0), 2, 3), vec![
+        arr2(&[[10, 11, 12, 13], [14, 15, 16, 17]]),
+        arr2(&[[22, 23, 24, 25], [26, 27, 28, 29]]),
+    ]);
 }
 
 /// Simple test for iterating 3d-arrays via `Axis Windows`.
@@ -378,14 +389,25 @@ fn test_axis_windows_with_stride_3d()
         .unwrap();
 
     itertools::assert_equal(a.axis_windows_with_stride(Axis(1), 2, 1), vec![
-            arr3(&[[[0, 1, 2], [3, 4, 5]], [[9, 10, 11], [12, 13, 14]], [[18, 19, 20], [21, 22, 23]]]),
-            arr3(&[[[3, 4, 5], [6, 7, 8]], [[12, 13, 14], [15, 16, 17]], [[21, 22, 23], [24, 25, 26]]]),
+            arr3(&[
+                [[0, 1, 2], [3, 4, 5]],
+                [[9, 10, 11], [12, 13, 14]],
+                [[18, 19, 20], [21, 22, 23]],
+            ]),
+            arr3(&[
+                [[3, 4, 5], [6, 7, 8]],
+                [[12, 13, 14], [15, 16, 17]],
+                [[21, 22, 23], [24, 25, 26]],
+            ]),
         ]);
 
-    itertools::assert_equal(
-        a.axis_windows_with_stride(Axis(1), 2, 2),
-        vec![arr3(&[[[0, 1, 2], [3, 4, 5]], [[9, 10, 11], [12, 13, 14]], [[18, 19, 20], [21, 22, 23]]])],
-    );
+    itertools::assert_equal(a.axis_windows_with_stride(Axis(1), 2, 2), vec![
+            arr3(&[
+                [[0, 1, 2], [3, 4, 5]],
+                [[9, 10, 11], [12, 13, 14]],
+                [[18, 19, 20], [21, 22, 23]],
+            ]),
+        ]);
 }
 
 #[test]
@@ -402,14 +424,14 @@ fn tests_axis_windows_with_stride_3d_zips_with_1d()
         .for_each(|b, a| {
             *b = a.sum();
         });
-    assert_eq!(b1, arr1(&[207, 261]));
+    assert_eq!(b1,arr1(&[207, 261]));
 
     Zip::from(b2.view_mut())
         .and(a.axis_windows_with_stride(Axis(1), 2, 2))
         .for_each(|b, a| {
             *b = a.sum();
         });
-    assert_eq!(b2, arr1(&[207]));
+    assert_eq!(b2,arr1(&[207]));
 }
 
 #[test]

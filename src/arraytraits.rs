@@ -580,7 +580,10 @@ where Slice: AsMut<[A]>
     {
         let xs = slice.as_mut();
         if mem::size_of::<A>() == 0 {
-            assert!(xs.len() <= isize::MAX as usize, "Slice length must fit in `isize`.",);
+            assert!(
+                xs.len() <= isize::MAX as usize,
+                "Slice length must fit in `isize`.",
+            );
         }
         unsafe { Self::from_shape_ptr(xs.len(), xs.as_mut_ptr()) }
     }
@@ -616,7 +619,10 @@ impl<'a, A, const N: usize> From<&'a mut [[A; N]]> for ArrayViewMut<'a, A, Ix2>
         if size_of::<A>() == 0 {
             dimension::size_of_shape_checked(&dim).expect("Product of non-zero axis lengths must not overflow isize.");
         } else if N == 0 {
-            assert!(xs.len() <= isize::MAX as usize, "Product of non-zero axis lengths must not overflow isize.",);
+            assert!(
+                xs.len() <= isize::MAX as usize,
+                "Product of non-zero axis lengths must not overflow isize.",
+            );
         }
 
         // `cols * rows` is guaranteed to fit in `isize` because we checked that it fits in
